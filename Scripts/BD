@@ -27,3 +27,21 @@ INSERT INTO Aplicativo VALUES (1, Facebook, Julia, 200);
 INSERT INTO Aplicativo VALUES (2, Instagram, Daniel, 139);
 INSERT INTO Aplicativo VALUES (3, Snapchat, Marina, 233);
 INSERT INTO Aplicativo VALUES (4, Twitter, Gabrielle, 213);
+
+//-----------------------------------------------
+//Código criação CARRO
+
+CREATE TABLE Carro(
+id BIGINT NOT NULL,
+modelo VARCHAR(50) NOT NULL,
+marca VARCHAR(50) NOT NULL,
+ano BIGINT NOT NULL,
+categoria VARCHAR(50) NOT NULL,
+PRIMARY KEY (id)
+);
+
+INSERT INTO Carro VALUES(1,'Meriva','Chevrolet',2011,'Minivan');
+INSERT INTO Carro VALUES(2,'Gol','Volkswagen',2000,'Supermini');
+INSERT INTO Carro VALUES(3,'Civic','Honda',2010,'Sedan médio');
+INSERT INTO Carro VALUES(4,'Corolla','Toyota',2018,'Sedan médio');
+
