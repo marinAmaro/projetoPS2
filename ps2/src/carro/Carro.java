@@ -12,6 +12,14 @@ public class Carro {
 		
 	}
 	
+	public long getId() {
+		return this.id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
 	public String getModelo() {
 		return this.modelo;
 	}
@@ -34,5 +42,13 @@ public class Carro {
 	
 	public void setAno(int ano) {
 		this.ano = ano;
+	}
+	
+	public String getCategoria() {
+		return this.categoria;
+	}
+	
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 }
