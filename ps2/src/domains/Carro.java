@@ -1,4 +1,4 @@
-package carro;
+package domains;
 
 public class Carro {
 	

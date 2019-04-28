@@ -1,4 +1,4 @@
-package aplicativo;
+package domains;
 
 public class Aplicativo {
 	long id;
