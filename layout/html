@@ -1,1 +1,36 @@
 //HTML
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+<link rel="stylesheet" type="text/css" href="rcstyle3.css" media="screen"/>
+<title>Trabalho</title>
+</head>
+<body>
+<div class="top">
+  <div class="header">
+    <div class="left">  </div>
+    </div>
+</div>
+<div class="container">
+  <div class="navigation"> <a href="#">Aplicativo</a> <a href="#">Carro</a> <a href="#">Empregado</a>
+    <div class="clearer"><span></span></div>
+  </div>
+  <div class="main">
+    <div class="content">
+        <br> <br> <br>
+      <h1>Aplicativo</h1>
+   <br> <br> <br> <br><br> <br><br> <br><br> <br>
+      <h1>Carro</h1>
+   <br> <br> <br> <br><br> <br><br> <br><br> <br>
+      <h1>Empregado</h1>
+      <br> <br> <br> <br><br> <br><br> <br><br> <br>
+  
+    </div>
+    
+    <div class="clearer"><span></span></div>
+  </div>
+  <div class="footer">&copy; 2019, Daniel Tavares, Gabrielle Mazon, Marina Amaro </div>
+</div>
+</body>
+</html>
