@@ -10,9 +10,9 @@ CREATE TABLE Empregado (
 );
 
 //Valores para teste
-INSERT INTO contas VALUES (1, 'Marina', 'estagiária', 1500,50);
-INSERT INTO contas VALUES (2, 'Daniel', 'desenvolvedor', 4000.00);
-INSERT INTO contas VALUES (3, 'Gabrielle', 'gerente de projetos', 3500.00);
+INSERT INTO Empregado VALUES (1, 'Marina', 'estagiária', 1500,50);
+INSERT INTO Empregado VALUES (2, 'Daniel', 'desenvolvedor', 4000.00);
+INSERT INTO Empregado VALUES (3, 'Gabrielle', 'gerente de projetos', 3500.00);
 
 //------------------------------------------------
 //Código criação APLICATIVO
@@ -23,10 +23,10 @@ CREATE TABLE Aplicativo
  );
 
  //Valores para teste
-INSERT INTO Aplicativo VALUES (1, Facebook, Julia, 200);
-INSERT INTO Aplicativo VALUES (2, Instagram, Daniel, 139);
-INSERT INTO Aplicativo VALUES (3, Snapchat, Marina, 233);
-INSERT INTO Aplicativo VALUES (4, Twitter, Gabrielle, 213);
+INSERT INTO Aplicativo VALUES (1, 'Facebook', 'Julia', 200);
+INSERT INTO Aplicativo VALUES (2, 'Instagram', 'Daniel', 139);
+INSERT INTO Aplicativo VALUES (3, 'Snapchat', 'Marina', 233);
+INSERT INTO Aplicativo VALUES (4, 'Twitter', 'Gabrielle', 213);
 
 //-----------------------------------------------
 //Código criação CARRO
