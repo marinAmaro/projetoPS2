@@ -1,4 +1,4 @@
-package integracaoJDBC;
+	package integracaoJDBC;
 
 import java.sql.*;
 
@@ -8,10 +8,6 @@ public class ConexaoJdbc {
 	
 	public ConexaoJdbc(String tabela) {
 		this.tabela = tabela;
-	}
-	
-	public void setQuery(String query) {
-		this.query = query;
 	}
 	
 	public PreparedStatement conectar() {
@@ -34,6 +30,10 @@ public class ConexaoJdbc {
 		}
 		
 		return stm;
+	}
+	
+	public void setQuery(String query) {
+		this.query = query;
 	}
 }
 
