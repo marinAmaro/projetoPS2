@@ -17,9 +17,12 @@ INSERT INTO Empregado VALUES (3, 'Gabrielle', 'gerente de projetos', 3500.00);
 //------------------------------------------------
 //Código criação APLICATIVO
 
-CREATE TABLE Aplicativo
-(Id INT NOT NULL, Nome VARCHAR (255),
- Desenvolvedor VARCHAR (255), NumeroDeDownloads INT NOT NULL
+CREATE TABLE Aplicativo (
+id INT NOT NULL,
+nome VARCHAR (30) NOT NULL,
+desenvolvedor VARCHAR (30) NOT NULL,
+numero_downloads INT,
+PRIMARY KEY (id)
  );
 
  //Valores para teste
