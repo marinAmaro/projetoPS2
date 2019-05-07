@@ -21,15 +21,15 @@ public class AplicativoDAO {
 	public AplicativoDAO() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC";			//Erro de fuso horário:: ?useTimezone=true&serverTimezone=UTC 
+			String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC";	//Erro de fuso horário:: ?useTimezone=true&serverTimezone=UTC 
 			String usuario = "root";
 			String senha = "projeto";
 
 			this.conexao = DriverManager.getConnection(url, usuario, senha);
 			
-			this.stmC = this.conexao.prepareStatement("INSERT INTO aplicativo(nome, desenvolvedor, numDownloads) VALUES(?, ?, ?)");
+			this.stmC = this.conexao.prepareStatement("INSERT INTO aplicativo(nome, desenvolvedor, numero_downloads) VALUES(?, ?, ?)");
 			this.stmR = this.conexao.prepareStatement("SELECT * FROM aplicativo");
-			this.stmU = this.conexao.prepareStatement("UPDATE aplicativo SET nome=?, desenvolvedor=?, numDownloads=? WHERE id=?");
+			this.stmU = this.conexao.prepareStatement("UPDATE aplicativo SET nome=?, desenvolvedor=?, numero_downloads=? WHERE id=?");
 			this.stmD = this.conexao.prepareStatement("DELETE FROM aplicativo WHERE id=?");
 			
 	
@@ -48,10 +48,10 @@ public class AplicativoDAO {
 			while(rs.next()) {
 				Aplicativo aplicativo = new Aplicativo();
 				
-				aplicativo.setId(rs.getLong("Id"));
-				aplicativo.setNome(rs.getString("Nome"));
-				aplicativo.setDesenvolvedor(rs.getString("Desenvolvedor"));
-				aplicativo.setNumDownLoads(rs.getInt("NumeroDeDownloads"));
+				aplicativo.setId(rs.getLong("id"));
+				aplicativo.setNome(rs.getString("nome"));
+				aplicativo.setDesenvolvedor(rs.getString("desenvolvedor"));
+				aplicativo.setNumDownLoads(rs.getInt("numero_downloads"));
 				
 				aplicativos.add(aplicativo);
 			}
