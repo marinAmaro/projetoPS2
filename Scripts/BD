@@ -26,10 +26,10 @@ PRIMARY KEY (id)
  );
 
  //Valores para teste
-INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES (Facebook, Julia, 200);
-INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES (Instagram,Daniel, 139);
-INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES (Snapchat,Marina, 233);
-INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES (Twitter, Gabrielle, 213);
+INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES ('Facebook', 'Julia', 200);
+INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES ('Instagram','Daniel', 139);
+INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES ('Snapchat','Marina', 233);
+INSERT INTO Aplicativo (nome,desenvolvedor,numero_downloads) VALUES ('Twitter', 'Gabrielle', 213);
 
 //-----------------------------------------------
 //Código criação CARRO
@@ -43,8 +43,8 @@ categoria VARCHAR(50) NOT NULL,
 PRIMARY KEY (id)
 );
 
-INSERT INTO (modelo,marca,ano,categoria) Carro VALUES(Meriva,Chevrolet,2011,Minivan);
-INSERT INTO (modelo,marca,ano,categoria) Carro VALUES(Gol,Volkswagen,2000,Supermini);
-INSERT INTO (modelo,marca,ano,categoria) Carro VALUES(Civic,Honda,2010,Sedan médio);
-INSERT INTO (modelo,marca,ano,categoria) Carro VALUES(Corolla,Toyota,2018,Sedan médio);
+INSERT INTO Carro (modelo,marca,ano,categoria) VALUES('Meriva','Chevrolet,2011,Minivan);
+INSERT INTO Carro (modelo,marca,ano,categoria) VALUES('Gol','Volkswagen',2000,'Supermini');
+INSERT INTO Carro (modelo,marca,ano,categoria) VALUES('Civic','Honda', 2010,'Sedan médio');
+INSERT INTO Carro (modelo,marca,ano,categoria) VALUES('Corolla','Toyota', 2018,'Sedan médio');
 
