@@ -12,40 +12,43 @@ public class Carro {
 		
 	}
 	
+	//GET
 	public long getId() {
 		return this.id;
-	}
-	
-	public void setId(long id) {
-		this.id = id;
 	}
 	
 	public String getModelo() {
 		return this.modelo;
 	}
 	
-	public void setModelo(String modelo) {
-		
-	}
-	
 	public String getMarca() {
 		return this.marca;
-	}
-	
-	public void setMarca(String marca) {
-		this.marca = marca;
 	}
 	
 	public int getAno () {
 		return this.ano;
 	}
 	
-	public void setAno(int ano) {
-		this.ano = ano;
-	}
-	
 	public String getCategoria() {
 		return this.categoria;
+	}
+	
+	
+	//SET
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+	
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+	
+	public void setAno(int ano) {
+		this.ano = ano;
 	}
 	
 	public void setCategoria(String categoria) {

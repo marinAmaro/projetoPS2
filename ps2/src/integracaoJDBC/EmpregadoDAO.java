@@ -24,7 +24,7 @@ public class EmpregadoDAO {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC";	//Erro de fuso horário:: ?useTimezone=true&serverTimezone=UTC 
 				String usuario = "root";
-				String senha = "projeto123";
+				String senha = "projeto";
 
 				this.conexao = DriverManager.getConnection(url, usuario, senha);
 				

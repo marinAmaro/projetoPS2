@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import domains.Aplicativo;
 import domains.Carro;
 
 public class CarroDAO {
@@ -27,13 +26,13 @@ public class CarroDAO {
 																								// horário::
 																								// ?useTimezone=true&serverTimezone=UTC
 			String usuario = "root";
-			String senha = "projeto123";
+			String senha = "projeto";
 
 			this.conexao = DriverManager.getConnection(url, usuario, senha);
 
-			this.stmC = this.conexao.prepareStatement("INSERT INTO aplicativo(modelo, marca, ano, categoria) VALUES(?, ?, ?, ?)");
+			this.stmC = this.conexao.prepareStatement("INSERT INTO carro(modelo, marca, ano, categoria) VALUES(?, ?, ?, ?)");
 			this.stmR = this.conexao.prepareStatement("SELECT * FROM carro");
-			this.stmU = this.conexao.prepareStatement("UPDATE aplicativo SET modelo=?, marca=?, ano=?, categoria=? WHERE id=?");
+			this.stmU = this.conexao.prepareStatement("UPDATE carro SET modelo=?, marca=?, ano=?, categoria=? WHERE id=?");
 			this.stmD = this.conexao.prepareStatement("DELETE FROM carro WHERE id=?");
 
 		} catch (Exception e) {
@@ -42,7 +41,7 @@ public class CarroDAO {
 
 	}
 
-	public List<Carro> listarAplicativos() {
+	public List<Carro> read() {
 		List<Carro> carros = new ArrayList<>();
 
 		try {
@@ -89,22 +88,28 @@ public class CarroDAO {
 	
 	}
 	
-	public void update(Carro carro) {
+	public int update(Carro carro) {
+		int r = 0 ;
+		
 		try {
 			this.stmU.setString(1, carro.getModelo());
 			this.stmU.setString(2, carro.getMarca());
 			this.stmU.setInt(3, carro.getAno());
 			this.stmU.setString(4, carro.getCategoria());
+			this.stmU.setLong(5, carro.getId());
 			
-			int r = this.stmU.executeUpdate();
+			r = this.stmU.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return r;
 	}
 	
-	public void delete(long id) throws SQLException {
+	public int delete(long id) throws SQLException {
 		this.stmD.setLong(1, id);
 		int r = this.stmD.executeUpdate();
+		return r;
 	}
 	
 }

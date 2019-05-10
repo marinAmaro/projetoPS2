@@ -5,12 +5,18 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import domains.Aplicativo;
 
 public class AplicativoDAO {
+	private final String sqlC = "INSERT INTO aplicativo(nome, desenvolvedor, numero_downloads) VALUES(?, ?, ?)";
+	private final String sqlR = "SELECT * FROM aplicativo";
+	private final String sqlReadOne = "SELECT * FROM aplicativo where id=?";
+	private final String sqlU = "UPDATE aplicativo SET nome=?, desenvolvedor=?, numero_downloads=? WHERE id=?";
+	private final String sqlD = "DELETE FROM aplicativo WHERE id=?";
 	
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
@@ -24,14 +30,14 @@ public class AplicativoDAO {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC";	//Erro de fuso horário:: ?useTimezone=true&serverTimezone=UTC 
 			String usuario = "root";
-			String senha = "projeto123";
+			String senha = "projeto";
 
 			this.conexao = DriverManager.getConnection(url, usuario, senha);
 			
-			this.stmC = this.conexao.prepareStatement("INSERT INTO aplicativo(nome, desenvolvedor, numero_downloads) VALUES(?, ?, ?)");
-			this.stmR = this.conexao.prepareStatement("SELECT * FROM aplicativo");
-			this.stmU = this.conexao.prepareStatement("UPDATE aplicativo SET nome=?, desenvolvedor=?, numero_downloads=? WHERE id=?");
-			this.stmD = this.conexao.prepareStatement("DELETE FROM aplicativo WHERE id=?");
+			this.stmC = this.conexao.prepareStatement(", Statement.RETURN_GENERATED_KEYS);
+			this.stmR = this.conexao.prepareStatement("");
+			this.stmU = this.conexao.prepareStatement();
+			this.stmD = this.conexao.prepareStatement();
 			
 	
 		} catch (Exception e) {
