@@ -8,7 +8,7 @@ import integracaoJDBC.AplicativoDAO;
 public class Main {
 	public static void main(String [] args) {
 		AplicativoDAO app = new AplicativoDAO();
-		List<Aplicativo> aplica = app.listarAplicativos();
+		List<Aplicativo> aplica = app.read();
 		
 		for (int i = 0; i < aplica.size(); i++) {
 			System.out.println(aplica.get(i).getNome());

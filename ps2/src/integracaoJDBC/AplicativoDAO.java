@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class AplicativoDAO {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC";	//Erro de fuso horário:: ?useTimezone=true&serverTimezone=UTC 
 			String usuario = "root";
-			String senha = "projeto";
+			String senha = "projeto123";
 
 			this.conexao = DriverManager.getConnection(url, usuario, senha);
 			
@@ -39,7 +40,7 @@ public class AplicativoDAO {
 		
 	}
 	
-	public List<Aplicativo> listarAplicativos(){
+	public List<Aplicativo> read(){
 		List<Aplicativo> aplicativos = new ArrayList<>();
 		
 		try {
@@ -62,6 +63,43 @@ public class AplicativoDAO {
 		}
 		
 		return aplicativos;
+	}
+	
+	public Aplicativo create (Aplicativo aplicativo) {
+		try {
+			   this.stmC.setString(1, aplicativo.getNome());
+			   this.stmC.setString(2, aplicativo.getDesenvolvedor());
+			   this.stmC.setInt(3, aplicativo.getNumDownloads());
+			   this.stmC.executeUpdate();
+			   ResultSet rs = this.stmC.getGeneratedKeys();
+			   rs.next();
+			   long id = rs.getLong(1);
+			   aplicativo.setId(id);
+			   
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return aplicativo;
+	
+	}
+	
+	public void update(Aplicativo aplicativo) {
+		try {
+			this.stmU.setString(1, aplicativo.getNome());
+			this.stmU.setString(2, aplicativo.getDesenvolvedor());
+			this.stmU.setInt(3, aplicativo.getNumDownloads());
+			this.stmU.setLong(4, aplicativo.getId());
+			
+			int r = this.stmU.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void delete(long id) throws SQLException {
+		this.stmD.setLong(1, id);
+		int r = this.stmD.executeUpdate();
 	}
 	
 }
