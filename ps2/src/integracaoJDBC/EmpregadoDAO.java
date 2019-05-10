@@ -1,10 +1,10 @@
 package integracaoJDBC;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,30 +12,32 @@ import domains.Empregado;
 
 public class EmpregadoDAO {
 
-		private PreparedStatement stmC;
-		private PreparedStatement stmR;
-		private PreparedStatement stmU;
-		private PreparedStatement stmD;
+	private final String sqlC = "INSERT INTO aplicativo(nome, cargo, salario) VALUES(?, ?, ?)";
+	private final String sqlR = "SELECT * FROM empregado";
+	private final String sqlReadFilter = "SELECT * FROM empregado where id=?";
+	private final String sqlU = "UPDATE aplicativo SET nome=?, cargo=?, salario=? WHERE id=?";
+	private final String sqlD = "DELETE FROM empregado WHERE id=?";
+	
+	private PreparedStatement stmC;
+	private PreparedStatement stmR;
+	private PreparedStatement stmRFilter;
+	private PreparedStatement stmU;
+	private PreparedStatement stmD;
 
-		Connection conexao;
+	Connection conexao;
 		
-		public EmpregadoDAO() {
+		public EmpregadoDAO(ConexaoJDBC conexao) throws Exception {
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC";	//Erro de fuso horário:: ?useTimezone=true&serverTimezone=UTC 
-				String usuario = "root";
-				String senha = "projeto";
+				Connection con = conexao.getConnection();
+				stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
+				stmR = con.prepareStatement(sqlR);
+				stmRFilter = con.prepareStatement(sqlReadFilter);
+				stmU = con.prepareStatement(sqlU);
+				stmD = con.prepareStatement(sqlD);
 
-				this.conexao = DriverManager.getConnection(url, usuario, senha);
-				
-				this.stmC = this.conexao.prepareStatement("INSERT INTO aplicativo(nome, cargo, salario) VALUES(?, ?, ?)");
-				this.stmR = this.conexao.prepareStatement("SELECT * FROM empregado");
-				this.stmU = this.conexao.prepareStatement("UPDATE aplicativo SET nome=?, cargo=?, salario=? WHERE id=?");
-				this.stmD = this.conexao.prepareStatement("DELETE FROM empregado WHERE id=?");
-				
-		
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+				//throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 			}
 			
 		}
@@ -85,20 +87,39 @@ public class EmpregadoDAO {
 		
 		}
 		
-		public void update(Empregado empregado) {
+		public int update(Empregado empregado) {
+			int r = 0;
+			
 			try {
 				this.stmU.setString(1, empregado.getNome());
 				this.stmU.setString(2, empregado.getCargo());
 				this.stmU.setDouble(3, empregado.getSalario());
 				
-				int r = this.stmU.executeUpdate();
+				r = this.stmU.executeUpdate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			return r;
 		}
 		
-		public void delete(long id) throws SQLException {
+		public int delete(long id) throws SQLException {
 			this.stmD.setLong(1, id);
 			int r = this.stmD.executeUpdate();
+			return r;
+		}
+		
+		public void close() throws Exception {
+			try {
+				stmC.close();
+				stmR.close();
+				stmRFilter.close();
+				stmU.close();
+				stmD.close();
+
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+				//throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
+			}
 		}
 	}

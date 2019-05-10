@@ -24,7 +24,7 @@ public class ConexaoJDBC {
 			try {
 				String url;
 				url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useTimezone=true&serverTimezone=UTC";
-				Class.forName("org.apache.derby.jdbc.ClientDriver");
+				Class.forName("com.mysql.cj.jdbc.Driver");
 
 				connection = DriverManager.getConnection(url, usuario, senha);
 

@@ -1,42 +1,42 @@
 package integracaoJDBC;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import domains.Carro;
 
 public class CarroDAO {
-
+	private final String sqlC = "INSERT INTO carro(modelo, marca, ano, categoria) VALUES(?, ?, ?, ?)";
+	private final String sqlR = "SELECT * FROM carro";
+	private final String sqlReadFilter = "SELECT * FROM carro where id=?";
+	private final String sqlU = "UPDATE carro SET modelo=?, marca=?, ano=?, categoria=? WHERE id=?";
+	private final String sqlD = "DELETE FROM carro WHERE id=?";
+	
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
+	private PreparedStatement stmRFilter;
 	private PreparedStatement stmU;
 	private PreparedStatement stmD;
 
 	Connection conexao;
 
-	public CarroDAO() {
+	public CarroDAO(ConexaoJDBC conexao) throws Exception {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/ps2?useTimezone=true&serverTimezone=UTC"; // Erro de fuso
-																								// horário::
-																								// ?useTimezone=true&serverTimezone=UTC
-			String usuario = "root";
-			String senha = "projeto";
+			Connection con = conexao.getConnection();
+			stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
+			stmR = con.prepareStatement(sqlR);
+			stmRFilter = con.prepareStatement(sqlReadFilter);
+			stmU = con.prepareStatement(sqlU);
+			stmD = con.prepareStatement(sqlD);
 
-			this.conexao = DriverManager.getConnection(url, usuario, senha);
-
-			this.stmC = this.conexao.prepareStatement("INSERT INTO carro(modelo, marca, ano, categoria) VALUES(?, ?, ?, ?)");
-			this.stmR = this.conexao.prepareStatement("SELECT * FROM carro");
-			this.stmU = this.conexao.prepareStatement("UPDATE carro SET modelo=?, marca=?, ano=?, categoria=? WHERE id=?");
-			this.stmD = this.conexao.prepareStatement("DELETE FROM carro WHERE id=?");
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+			//throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 		}
 
 	}
@@ -110,6 +110,20 @@ public class CarroDAO {
 		this.stmD.setLong(1, id);
 		int r = this.stmD.executeUpdate();
 		return r;
+	}
+	
+	public void close() throws Exception {
+		try {
+			stmC.close();
+			stmR.close();
+			stmRFilter.close();
+			stmU.close();
+			stmD.close();
+
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+			//throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
+		}
 	}
 	
 }
