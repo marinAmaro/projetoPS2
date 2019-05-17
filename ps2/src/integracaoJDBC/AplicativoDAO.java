@@ -41,71 +41,101 @@ public class AplicativoDAO {
 
 	}
 	
-	public List<Aplicativo> read(){
+	public List<Aplicativo> read() throws DaoException{
 		List<Aplicativo> aplicativos = new ArrayList<>();
-		
 		try {
-			ResultSet rs = this.stmR.executeQuery();	
-			
+			ResultSet rs = this.stmR.executeQuery();
 			while(rs.next()) {
-				Aplicativo aplicativo = new Aplicativo();
-				
-				aplicativo.setId(rs.getLong("id"));
-				aplicativo.setNome(rs.getString("nome"));
-				aplicativo.setDesenvolvedor(rs.getString("desenvolvedor"));
-				aplicativo.setNumDownLoads(rs.getInt("numero_downloads"));
-				
-				aplicativos.add(aplicativo);
+                            long id = rs.getLong("id");
+                            String nome = rs.getString("nome");
+                            String desenvolvedor = rs.getString("desenvolvedor");
+                            int numDownloads = rs.getInt("numero_downloads");
+                            
+				Aplicativo app = new Aplicativo(id,nome,desenvolvedor,numDownloads);				
+				aplicativos.add(app);
 			}
 			
 			rs.close();
 			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch(SQLException ex) {
+                    ex.printStackTrace();
+			throw new DaoException("Falha ao ler registros: " + ex.getMessage());
+                }
 		
 		return aplicativos;
 	}
+        
+        public Aplicativo readById(long id) throws DaoException
+        {
+            Aplicativo app = null;
+            
+            try
+            {
+                this.stmRFilter.setLong(1,id);
+                ResultSet rs = this.stmRFilter.executeQuery();
+                if (rs.next()) {
+                    String nome = rs.getString("nome");
+                    String desenvolvedor = rs.getString("desenvolvedor");
+                    int numDownloads = rs.getInt("numero_downloads");
+                    app = new Aplicativo(id,nome,desenvolvedor,numDownloads);
+                    
+                }
+            }
+            catch(SQLException ex)
+            {
+                ex.printStackTrace();
+                throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
+            }
+            return app;
+        }
 	
-	public Aplicativo create (Aplicativo aplicativo) {
-		try {
+	public long create (Aplicativo aplicativo) throws DaoException {
+            long id = 0;    
+            try {
 			   this.stmC.setString(1, aplicativo.getNome());
 			   this.stmC.setString(2, aplicativo.getDesenvolvedor());
 			   this.stmC.setInt(3, aplicativo.getNumDownloads());
 			   this.stmC.executeUpdate();
 			   ResultSet rs = this.stmC.getGeneratedKeys();
-			   rs.next();
-			   long id = rs.getLong(1);
-			   aplicativo.setId(id);
+			             if (rs.next()) 
+                                     {
+                                         id = rs.getLong(1);
+                                     }
 			   
-		} catch (Exception e) {
-			e.printStackTrace();
+			   		} catch(SQLException ex) {
+                                            ex.printStackTrace();
+			throw new DaoException("Falha ao criar registro: " + ex.getMessage());
 		}
-		
-		return aplicativo;
+		return id;
 	
 	}
 	
-	public int update(Aplicativo aplicativo) {
-		int r = 0;
-		
-		try {
+	public int update(Aplicativo aplicativo) throws DaoException{
+            int r = 0;
+            try {
 			this.stmU.setString(1, aplicativo.getNome());
 			this.stmU.setString(2, aplicativo.getDesenvolvedor());
 			this.stmU.setInt(3, aplicativo.getNumDownloads());
 			this.stmU.setLong(4, aplicativo.getId());
-			
 			r = this.stmU.executeUpdate();
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
+                        throw new DaoException("Falha ao atualizar registro: " + e.getMessage());
 		}
 		
 		return r;
 	}
 	
-	public int delete(long id) throws SQLException {
-		this.stmD.setLong(1, id);
-		int r = this.stmD.executeUpdate();
+	public int delete(long id) throws DaoException {
+	int r = 0;	
+            try{
+                    this.stmD.setLong(1, id);
+                    r = this.stmD.executeUpdate();
+                }catch(SQLException e) 
+                {
+                    throw new DaoException("Falha ao apagar registro: " + e.getMessage());
+                }
+                    
 		return r;
 	}
 	
@@ -119,7 +149,7 @@ public class AplicativoDAO {
 
 		} catch(SQLException ex) {
 			ex.printStackTrace();
-			//throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
+			throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
 		}
 	}
 }
