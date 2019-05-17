@@ -9,6 +9,8 @@ import integracaoJDBC.ConexaoJDBC;
 public class Main {
 	public static void main(String [] args) throws Exception {
 		
+		//TESTE DE CONEXÃO
+		
 		ConexaoJDBC conexao = new ConexaoJDBC("root", "projeto", "localhost", 3306, "ps2");
 		
 		//TESTE APLICATIVO ---- READ
@@ -22,26 +24,26 @@ public class Main {
 	}
 				
 		//TESTE APLICATIVO ---- CREATE
-		Aplicativo appCriar= new Aplicativo();
-		appCriar.setDesenvolvedor("Marina teste");
-		appCriar.setNumDownLoads(550);
-		appCriar.setNome("CRUD");
+		//Aplicativo appCriar= new Aplicativo();
+		//appCriar.setDesenvolvedor("Marina teste");
+		//appCriar.setNumDownLoads(550);
+		//appCriar.setNome("CRUD");
 		
 		
-		System.out.println("CRIAÇÃO APLICATIVO:: ");
-		Aplicativo appCriado = dao.create(appCriar);
-		System.out.println("ID:: " + appCriado.getId());
+		//System.out.println("CRIAÇÃO APLICATIVO:: ");
+		//Aplicativo appCriado = dao.create(appCriar);
+		//System.out.println("ID:: " + appCriado.getId());
 		
 		//TESTE APLICATIVO ---- UPDATE
-		appCriado.setNumDownLoads(1573);
-		int nUpdates = dao.update(appCriado);
-		System.out.println("nUpdates->> " + nUpdates);
+		//appCriado.setNumDownLoads(1573);
+		//int nUpdates = dao.update(appCriado);
+		//System.out.println("nUpdates->> " + nUpdates);
 		
 		
 		//TESTE APLICATIVO ---- DELETE
-		long id = appCriado.getId();
-		int deletados = dao.delete(id);
-		System.out.println("numero de deleados:: " + deletados);
+		//long id = appCriado.getId();
+		//int deletados = dao.delete(id);
+		//System.out.println("numero de deleados:: " + deletados);
 		
 		//IMPORTANTE!!!!!!!
 		dao.close();

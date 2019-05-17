@@ -22,15 +22,7 @@ public class CarroResource {
     @GET
     public List<Carro> read() throws DaoException {
         List<Carro> carros;
-		try
-		{
-			carros = dao.read();
-		}
-		catch (DaoException ex)
-		{
-			ex.printStackTrace();
-			carros = null;
-		}
+		carros = dao.read();
 		return carros;
     }
     
