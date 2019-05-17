@@ -72,7 +72,7 @@ public class AplicativoResource {
 			ex.printStackTrace();
 			resp = null;
 		}
-		return app;
+		return resp;
     }
     
     @DELETE
