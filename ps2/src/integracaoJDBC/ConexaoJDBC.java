@@ -11,8 +11,8 @@ public class ConexaoJDBC {
 	private Connection connection;
 
 	public ConexaoJDBC(String usuario, String senha, String host, int port, String dataBase) {
-		this.usuario = usuario;
-		this.senha = senha;
+		this.usuario = usuario; //root
+		this.senha = senha; // projeto
 		this.host = host; //localhost
 		this.port = port; //3306
 		this.dbName = dataBase; //ps2
@@ -24,7 +24,7 @@ public class ConexaoJDBC {
 			try {
 				String url;
 				url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useTimezone=true&serverTimezone=UTC";
-				Class.forName("com.mysql.cj.jdbc.Driver");
+				Class.forName("com.mysql.jdbc.Driver");
 
 				connection = DriverManager.getConnection(url, usuario, senha);
 

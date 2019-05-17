@@ -102,5 +102,6 @@
 	<classpathentry kind="lib" path="C:/Users/marin/eclipse-workspace/projetoPS2/ps2/lib/dropwizard/tomcat-jdbc-9.0.12.jar"/>
 	<classpathentry kind="lib" path="C:/Users/marin/eclipse-workspace/projetoPS2/ps2/lib/dropwizard/tomcat-juli-9.0.12.jar"/>
 	<classpathentry kind="lib" path="C:/Users/marin/eclipse-workspace/projetoPS2/ps2/lib/dropwizard/validation-api-1.1.0.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Users/marin/eclipse-workspace/projetoPS2/ps2/lib/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
