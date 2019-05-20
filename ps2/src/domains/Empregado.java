@@ -6,7 +6,9 @@ public class Empregado {
 	String cargo;
 	double salario;
 	
-	public Empregado() {}
+	public Empregado() {
+		
+	}
 	
 	public Empregado(long id, String nome, String cargo, double salario) {
 		this.id = id;

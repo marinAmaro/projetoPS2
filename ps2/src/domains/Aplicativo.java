@@ -5,6 +5,10 @@ public class Aplicativo {
 	String nome;
 	String desenvolvedor;
 	int numDownloads;
+	
+	public Aplicativo() {
+		
+	}
 
 	public Aplicativo(long id, String nome, String desenvolvedor, int numDownloads) {
 		this.id = id;
