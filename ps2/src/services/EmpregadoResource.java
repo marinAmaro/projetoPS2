@@ -1,6 +1,7 @@
 package services;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -35,6 +36,51 @@ public class EmpregadoResource {
 		empregados = dao.read();
 		return empregados;
 	}
+	
+	@GET
+    @Path("/id/{id}")
+    public Empregado readById(@PathParam("id") LongParam id) {
+        long idEmpregado = id.get();
+        Empregado emp = null;
+        
+        try {
+        	emp = dao.readById(idEmpregado);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        
+        return emp;
+    }
+	
+	@GET
+	@Path("/nome/{nome}")
+	public Empregado readByName(@PathParam("nome") LongParam nome) throws DaoException{
+		String nomeEmpregado = String.valueOf(nome.get());
+		Empregado app = null;
+		
+		try {
+			app = dao.readByNome(nomeEmpregado);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return app;
+	}
+	
+	@GET
+	@Path("/cargo/{cargo}")
+	public List<Empregado> readByCargo(@PathParam("cargo") LongParam nome) throws DaoException{
+		String nomeCargo = String.valueOf(nome.get());
+		List<Empregado> empregados = new ArrayList<Empregado>();
+		
+		try {
+			empregados = dao.readByCargo(nomeCargo);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return empregados;
+	}
 
 	@POST
 	public Empregado create(Empregado emp) throws DaoException {
@@ -50,13 +96,6 @@ public class EmpregadoResource {
 		return resp;
 	}
 
-	@GET
-	@Path("{id}")
-	public Empregado readOne(@PathParam("id") LongParam id) {
-		long idEmpregado = id.get();
-		// Precisa implementar no DAO
-		return null;
-	}
 
 	@PUT
 	@Path("{id}")

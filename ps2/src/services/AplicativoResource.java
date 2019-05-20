@@ -41,7 +41,7 @@ public class AplicativoResource {
 	}
 
 	@GET
-    @Path("{id}")
+    @Path("/id/{id}")
     public Aplicativo readById(@PathParam("id") LongParam id) {
         long idAplicativo = id.get();
         Aplicativo app = null;
@@ -56,7 +56,7 @@ public class AplicativoResource {
     }
 
 	@GET
-	@Path("{nome}")
+	@Path("/nome/{nome}")
 	public Aplicativo readByName(@PathParam("nome") LongParam nome) throws DaoException{
 		String nomeApp = String.valueOf(nome.get());
 		Aplicativo app = null;
@@ -71,7 +71,7 @@ public class AplicativoResource {
 	}
 	
 	@GET
-	@Path("{desenvolvedor}")
+	@Path("/desenvolvedor/{desenvolvedor}")
 	public Aplicativo readByDesenvolvedor(@PathParam("desenvolvedor") LongParam desenvolvedor) throws DaoException{
 		String desenvolvedorApp = String.valueOf(desenvolvedor.get());
 		Aplicativo app = null;

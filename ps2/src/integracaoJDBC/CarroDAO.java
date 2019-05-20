@@ -13,13 +13,17 @@ import domains.Carro;
 public class CarroDAO {
 	private final String sqlC = "INSERT INTO carro(modelo, marca, ano, categoria) VALUES(?, ?, ?, ?)";
 	private final String sqlR = "SELECT * FROM carro";
-	private final String sqlReadFilter = "SELECT * FROM carro where id=?";
+	private final String sqlRById = "SELECT * FROM carro where id=?";
+	private final String sqlRByAno = "SELECT * FROM carro where ano=?";
+	private final String sqlRByModelo = "SELECT * FROM carro where modelo=?";
 	private final String sqlU = "UPDATE carro SET modelo=?, marca=?, ano=?, categoria=? WHERE id=?";
 	private final String sqlD = "DELETE FROM carro WHERE id=?";
 
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
-	private PreparedStatement stmRFilter;
+	private PreparedStatement stmRById;
+	private PreparedStatement stmRByAno;
+	private PreparedStatement stmRByModelo;
 	private PreparedStatement stmU;
 	private PreparedStatement stmD;
 
@@ -30,13 +34,14 @@ public class CarroDAO {
 			Connection con = conexao.getConnection();
 			stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
 			stmR = con.prepareStatement(sqlR);
-			stmRFilter = con.prepareStatement(sqlReadFilter);
+			stmRById = con.prepareStatement(sqlRById);
+			stmRByAno = con.prepareStatement(sqlRByAno);
+			stmRByModelo = con.prepareStatement(sqlRByModelo);
 			stmU = con.prepareStatement(sqlU);
 			stmD = con.prepareStatement(sqlD);
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
-			// throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 		}
 
 	}
@@ -70,8 +75,8 @@ public class CarroDAO {
 		Carro car = null;
 
 		try {
-			this.stmRFilter.setLong(1, id);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRById.setLong(1, id);
+			ResultSet rs = this.stmRById.executeQuery();
 			if (rs.next()) {
 
 				int ano = rs.getInt("ano");
@@ -93,9 +98,8 @@ public class CarroDAO {
 		Carro car;
 
 		try {
-			this.stmRFilter.setString(1, "ano");
-			this.stmRFilter.setInt(2, ano);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRByAno.setInt(1, ano);
+			ResultSet rs = this.stmRByAno.executeQuery();
 			while (rs.next()) {
 				long id = rs.getLong("id");
 				String marca = rs.getString("marca");
@@ -118,9 +122,8 @@ public class CarroDAO {
 		Carro car;
 
 		try {
-			this.stmRFilter.setString(1, "modelo");
-			this.stmRFilter.setString(2, modelo);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRByModelo.setString(1, modelo);
+			ResultSet rs = this.stmRByModelo.executeQuery();
 			while (rs.next()) {
 				long id = rs.getLong("id");
 				int ano = rs.getInt("ano");
@@ -189,13 +192,14 @@ public class CarroDAO {
 		try {
 			stmC.close();
 			stmR.close();
-			stmRFilter.close();
+			stmRById.close();
+			stmRByAno.close();
+			stmRByModelo.close();
 			stmU.close();
 			stmD.close();
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
-			// throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
+			throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
 		}
 	}
 

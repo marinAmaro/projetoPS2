@@ -14,13 +14,17 @@ public class EmpregadoDAO {
 
 	private final String sqlC = "INSERT INTO aplicativo(nome, cargo, salario) VALUES(?, ?, ?)";
 	private final String sqlR = "SELECT * FROM empregado";
-	private final String sqlReadFilter = "SELECT * FROM empregado where id=?";
+	private final String sqlRById = "SELECT * FROM empregado where id=?";
+	private final String sqlRByNome = "SELECT * FROM empregado where nome=?";
+	private final String sqlRByCargo = "SELECT * FROM empregado where cargo=?";
 	private final String sqlU = "UPDATE aplicativo SET nome=?, cargo=?, salario=? WHERE id=?";
 	private final String sqlD = "DELETE FROM empregado WHERE id=?";
 
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
-	private PreparedStatement stmRFilter;
+	private PreparedStatement stmRById;
+	private PreparedStatement stmRByNome;
+	private PreparedStatement stmRByCargo;
 	private PreparedStatement stmU;
 	private PreparedStatement stmD;
 
@@ -31,13 +35,14 @@ public class EmpregadoDAO {
 			Connection con = conexao.getConnection();
 			stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
 			stmR = con.prepareStatement(sqlR);
-			stmRFilter = con.prepareStatement(sqlReadFilter);
+			stmRById = con.prepareStatement(sqlRById);
+			stmRByNome = con.prepareStatement(sqlRByNome);
+			stmRByCargo = con.prepareStatement(sqlRByCargo);
 			stmU = con.prepareStatement(sqlU);
 			stmD = con.prepareStatement(sqlD);
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
-			// throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
+			throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 		}
 
 	}
@@ -70,8 +75,8 @@ public class EmpregadoDAO {
 		Empregado emp = null;
 
 		try {
-			this.stmRFilter.setLong(1, id);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRById.setLong(1, id);
+			ResultSet rs = this.stmRById.executeQuery();
 			if (rs.next()) {
 				String nome = rs.getString("nome");
 				String cargo = rs.getString("cargo");
@@ -85,6 +90,51 @@ public class EmpregadoDAO {
 		}
 
 		return emp;
+	}
+	
+	public Empregado readByNome(String nome) throws DaoException {
+		Empregado emp = null;
+
+		try {
+			this.stmRByNome.setString(1, nome);
+			ResultSet rs = this.stmRById.executeQuery();
+			if (rs.next()) {
+				long id = rs.getLong("id")
+;				String cargo = rs.getString("cargo");
+				double salario = rs.getDouble("salario");
+				emp = new Empregado(id, nome, cargo, salario);
+
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
+		}
+
+		return emp;
+	}
+	
+	public List<Empregado> readByCargo(String cargo) throws DaoException {
+		
+		List<Empregado> empregados = new ArrayList<>();
+		Empregado emp = null;
+
+		try {
+			this.stmRByCargo.setString(1, cargo);
+			ResultSet rs = this.stmRById.executeQuery();
+			while (rs.next()) {
+				long id = rs.getLong("id");
+				String nome = rs.getString("nome");
+				double salario = rs.getDouble("salario");
+				emp = new Empregado(id, nome, cargo, salario);
+
+				empregados.add(emp);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
+		}
+
+		return empregados;
 	}
 
 	public long create(Empregado empregado) throws DaoException {
@@ -138,13 +188,14 @@ public class EmpregadoDAO {
 		try {
 			stmC.close();
 			stmR.close();
-			stmRFilter.close();
+			stmRById.close();
+			stmRByNome.close();
+			stmRByCargo.close();
 			stmU.close();
 			stmD.close();
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
-			// throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
+			throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
 		}
 	}
 }

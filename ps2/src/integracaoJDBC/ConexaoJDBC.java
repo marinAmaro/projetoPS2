@@ -23,7 +23,7 @@ public class ConexaoJDBC {
 		if (connection == null) {
 			try {
 				String url;
-				url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useTimezone=true&serverTimezone=UTC";
+				url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useTimezone=true&serverTimezone=UTC&autoReconnect=true";
 				Class.forName("com.mysql.jdbc.Driver");
 
 				connection = DriverManager.getConnection(url, usuario, senha);

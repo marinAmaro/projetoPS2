@@ -13,13 +13,17 @@ import domains.Aplicativo;
 public class AplicativoDAO {
 	private final String sqlC = "INSERT INTO aplicativo(nome, desenvolvedor, numero_downloads) VALUES(?, ?, ?)";
 	private final String sqlR = "SELECT * FROM aplicativo";
-	private final String sqlReadFilter = "SELECT * FROM aplicativo where ?=?";
+	private final String sqlReadById = "SELECT * FROM aplicativo where id=?";
+	private final String sqlReadByNome = "SELECT * FROM aplicativo where nome=?";
+	private final String sqlReadByDesenvolvedor = "SELECT * FROM aplicativo where desenvolvedor=?";
 	private final String sqlU = "UPDATE aplicativo SET nome=?, desenvolvedor=?, numero_downloads=? WHERE id=?";
 	private final String sqlD = "DELETE FROM aplicativo WHERE id=?";
 
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
-	private PreparedStatement stmRFilter;
+	private PreparedStatement stmRById;
+	private PreparedStatement stmRByNome;
+	private PreparedStatement stmRByDesenvolvedor;
 	private PreparedStatement stmU;
 	private PreparedStatement stmD;
 
@@ -30,7 +34,9 @@ public class AplicativoDAO {
 			Connection con = conexao.getConnection();
 			stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
 			stmR = con.prepareStatement(sqlR);
-			stmRFilter = con.prepareStatement(sqlReadFilter);
+			stmRById = con.prepareStatement(sqlReadById);
+			stmRByNome = con.prepareStatement(sqlReadByNome);
+			stmRByDesenvolvedor = con.prepareStatement(sqlReadByDesenvolvedor);
 			stmU = con.prepareStatement(sqlU);
 			stmD = con.prepareStatement(sqlD);
 
@@ -69,8 +75,8 @@ public class AplicativoDAO {
 		Aplicativo app = null;
 
 		try {
-			this.stmRFilter.setLong(1, id);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRById.setLong(1, id);
+			ResultSet rs = this.stmRById.executeQuery();
 			if (rs.next()) {
 				String nome = rs.getString("nome");
 				String desenvolvedor = rs.getString("desenvolvedor");
@@ -89,9 +95,8 @@ public class AplicativoDAO {
 		Aplicativo app = null;
 
 		try {
-			this.stmRFilter.setString(1, "nome");
-			this.stmRFilter.setString(2, nome);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRByNome.setString(1, nome);
+			ResultSet rs = this.stmRByNome.executeQuery();
 			if (rs.next()) {
 				String desenvolvedor = rs.getString("desenvolvedor");
 				int numDownloads = rs.getInt("numero_downloads");
@@ -111,9 +116,8 @@ public class AplicativoDAO {
 		Aplicativo app = null;
 
 		try {
-			this.stmRFilter.setString(1, "desenvolvedor");
-			this.stmRFilter.setString(2, desenvolvedor);
-			ResultSet rs = this.stmRFilter.executeQuery();
+			this.stmRByDesenvolvedor.setString(1, desenvolvedor);
+			ResultSet rs = this.stmRByDesenvolvedor.executeQuery();
 			if (rs.next()) {
 				long id = rs.getLong("id");
 				String nome = rs.getString("nome");
@@ -181,7 +185,9 @@ public class AplicativoDAO {
 		try {
 			stmC.close();
 			stmR.close();
-			stmRFilter.close();
+			stmRByDesenvolvedor.close();
+			stmRByNome.close();
+			stmRById.close();
 			stmU.close();
 			stmD.close();
 

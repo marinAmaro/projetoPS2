@@ -31,7 +31,20 @@ public class CarroResource {
 	}
 
 	@GET
-    @Path("{id}")
+    public List<Carro> read() {
+        List<Carro> carros = new ArrayList<>();
+        
+        try {
+        	carros = dao.read();
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        
+        return carros;
+    }
+	
+	@GET
+    @Path("/id/{id}")
     public Carro readById(@PathParam("id") LongParam id) {
         long idCarro = id.get();
         Carro car = null;
@@ -46,7 +59,7 @@ public class CarroResource {
     }
 
 	@GET
-	@Path("{modelo}")
+	@Path("/modelo/{modelo}")
 	public List<Carro> readByName(@PathParam("nome") LongParam modelo) throws DaoException{
 		String nomeCarro = String.valueOf(modelo.get());
 		List<Carro> car = null;
@@ -61,7 +74,7 @@ public class CarroResource {
 	}
 	
 	@GET
-	@Path("{ano}")
+	@Path("/ano/{ano}")
 	public List<Carro> readByAno(@PathParam("ano") LongParam ano) throws DaoException{
 		int anoCarros = Integer.parseInt(String.valueOf(ano.get()));
 		List<Carro> car = new ArrayList<Carro>();
