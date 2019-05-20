@@ -2,6 +2,7 @@ package services;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -57,8 +58,8 @@ public class AplicativoResource {
 
 	@GET
 	@Path("/nome/{nome}")
-	public Aplicativo readByName(@PathParam("nome") LongParam nome) throws DaoException{
-		String nomeApp = String.valueOf(nome.get());
+	public Aplicativo readByName(@PathParam("nome") String nome) throws DaoException{
+		String nomeApp = nome;
 		Aplicativo app = null;
 		
 		try {
@@ -72,8 +73,8 @@ public class AplicativoResource {
 	
 	@GET
 	@Path("/desenvolvedor/{desenvolvedor}")
-	public Aplicativo readByDesenvolvedor(@PathParam("desenvolvedor") LongParam desenvolvedor) throws DaoException{
-		String desenvolvedorApp = String.valueOf(desenvolvedor.get());
+	public Aplicativo readByDesenvolvedor(@PathParam("desenvolvedor") String desenvolvedor) throws DaoException{
+		String desenvolvedorApp = desenvolvedor;
 		Aplicativo app = null;
 		
 		try {

@@ -97,7 +97,7 @@ public class EmpregadoDAO {
 
 		try {
 			this.stmRByNome.setString(1, nome);
-			ResultSet rs = this.stmRById.executeQuery();
+			ResultSet rs = this.stmRByNome.executeQuery();
 			if (rs.next()) {
 				long id = rs.getLong("id")
 ;				String cargo = rs.getString("cargo");
@@ -120,7 +120,7 @@ public class EmpregadoDAO {
 
 		try {
 			this.stmRByCargo.setString(1, cargo);
-			ResultSet rs = this.stmRById.executeQuery();
+			ResultSet rs = this.stmRByCargo.executeQuery();
 			while (rs.next()) {
 				long id = rs.getLong("id");
 				String nome = rs.getString("nome");

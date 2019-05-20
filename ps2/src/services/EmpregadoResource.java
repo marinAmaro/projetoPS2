@@ -54,8 +54,8 @@ public class EmpregadoResource {
 	
 	@GET
 	@Path("/nome/{nome}")
-	public Empregado readByName(@PathParam("nome") LongParam nome) throws DaoException{
-		String nomeEmpregado = String.valueOf(nome.get());
+	public Empregado readByName(@PathParam("nome") String nome) throws DaoException{
+		String nomeEmpregado = nome;
 		Empregado app = null;
 		
 		try {
@@ -69,8 +69,8 @@ public class EmpregadoResource {
 	
 	@GET
 	@Path("/cargo/{cargo}")
-	public List<Empregado> readByCargo(@PathParam("cargo") LongParam nome) throws DaoException{
-		String nomeCargo = String.valueOf(nome.get());
+	public List<Empregado> readByCargo(@PathParam("cargo") String cargo) throws DaoException{
+		String nomeCargo = cargo;
 		List<Empregado> empregados = new ArrayList<Empregado>();
 		
 		try {

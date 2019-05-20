@@ -41,8 +41,7 @@ public class AplicativoDAO {
 			stmD = con.prepareStatement(sqlD);
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
-			// throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
+			throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 		}
 
 	}
@@ -138,6 +137,7 @@ public class AplicativoDAO {
 		try {
 			this.stmC.setString(1, aplicativo.getNome());
 			this.stmC.setString(2, aplicativo.getDesenvolvedor());
+			System.out.println("->>>>> " + aplicativo.getNumDownloads());
 			this.stmC.setInt(3, aplicativo.getNumDownloads());
 			this.stmC.executeUpdate();
 			ResultSet rs = this.stmC.getGeneratedKeys();
@@ -192,7 +192,6 @@ public class AplicativoDAO {
 			stmD.close();
 
 		} catch (SQLException ex) {
-			ex.printStackTrace();
 			throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
 		}
 	}
