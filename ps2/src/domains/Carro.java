@@ -5,7 +5,6 @@ public class Carro {
 	private int ano;
 	private String modelo;
 	private String marca;
-
 	private String categoria;
 
 	public Carro() {
@@ -15,6 +14,7 @@ public class Carro {
 	public Carro(long id, int ano, String modelo, String marca, String categoria) {
 		this.id = id;
 		this.marca = marca;
+		this.modelo = modelo;
 		this.ano = ano;
 		this.categoria = categoria;
 	}

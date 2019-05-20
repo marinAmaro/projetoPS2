@@ -60,7 +60,7 @@ public class CarroResource {
 
 	@GET
 	@Path("/modelo/{modelo}")
-	public List<Carro> readByName(@PathParam("nome") String modelo) throws DaoException{
+	public List<Carro> readByModelo(@PathParam("modelo") String modelo) throws DaoException{
 		String nomeCarro = modelo;
 		List<Carro> car = null;
 		

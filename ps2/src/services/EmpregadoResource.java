@@ -106,7 +106,7 @@ public class EmpregadoResource {
 		resp = emp;
 		return resp;
 	}
-
+	
 	@DELETE
 	@Path("{id}")
 	public Response delete(@PathParam("id") LongParam id) throws DaoException, SQLException {
@@ -115,12 +115,12 @@ public class EmpregadoResource {
 			emp = dao.readById(id.get());
 		} catch (DaoException ex) {
 			ex.printStackTrace();
-			throw new WebApplicationException("Erro ao buscar Aplicativo com id=" + id.get(), 500);
+			throw new WebApplicationException("Erro ao buscar Empregado com id=" + id.get(), 500);
 		}
 		if (emp != null) {
 			dao.delete(id.get());
 		} else {
-			throw new WebApplicationException("Aplicativo com id=" + id.get() + " não encontrado!", 404);
+			throw new WebApplicationException("Empregado com id=" + id.get() + " não encontrado!", 404);
 		}
 		return Response.ok().build();
 	}

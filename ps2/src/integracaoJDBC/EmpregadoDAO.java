@@ -12,12 +12,12 @@ import domains.Empregado;
 
 public class EmpregadoDAO {
 
-	private final String sqlC = "INSERT INTO aplicativo(nome, cargo, salario) VALUES(?, ?, ?)";
+	private final String sqlC = "INSERT INTO empregado(nome, cargo, salario) VALUES(?, ?, ?)";
 	private final String sqlR = "SELECT * FROM empregado";
 	private final String sqlRById = "SELECT * FROM empregado where id=?";
 	private final String sqlRByNome = "SELECT * FROM empregado where nome=?";
 	private final String sqlRByCargo = "SELECT * FROM empregado where cargo=?";
-	private final String sqlU = "UPDATE aplicativo SET nome=?, cargo=?, salario=? WHERE id=?";
+	private final String sqlU = "UPDATE empregado SET nome=?, cargo=?, salario=? WHERE id=?";
 	private final String sqlD = "DELETE FROM empregado WHERE id=?";
 
 	private PreparedStatement stmC;
@@ -140,6 +140,8 @@ public class EmpregadoDAO {
 	public long create(Empregado empregado) throws DaoException {
 		long id = 0;
 		try {
+			System.out.println("nome: " + empregado.getNome());
+			System.out.println("cargo: " + empregado.getCargo());
 			this.stmC.setString(1, empregado.getNome());
 			this.stmC.setString(2, empregado.getCargo());
 			this.stmC.setDouble(3, empregado.getSalario());
@@ -163,7 +165,8 @@ public class EmpregadoDAO {
 			this.stmU.setString(1, empregado.getNome());
 			this.stmU.setString(2, empregado.getCargo());
 			this.stmU.setDouble(3, empregado.getSalario());
-
+			this.stmU.setLong(4, empregado.getId());
+			
 			r = this.stmU.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

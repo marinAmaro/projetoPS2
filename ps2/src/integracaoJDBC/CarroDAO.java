@@ -104,6 +104,7 @@ public class CarroDAO {
 				long id = rs.getLong("id");
 				String marca = rs.getString("marca");
 				String modelo = rs.getString("modelo");
+				System.out.println("modelo ->> " + modelo);
 				String categoria = rs.getString("categoria");
 
 				car = new Carro(id, ano, modelo, marca, categoria);
@@ -145,6 +146,7 @@ public class CarroDAO {
 
 		long id = 0;
 		try {
+			System.out.println("modelo>> " + carro.getModelo());
 			this.stmC.setString(1, carro.getModelo());
 			this.stmC.setString(2, carro.getMarca());
 			this.stmC.setInt(3, carro.getAno());
