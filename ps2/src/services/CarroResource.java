@@ -1,5 +1,7 @@
 package services;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -13,7 +15,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import domains.Aplicativo;
 import domains.Carro;
 import integracaoJDBC.CarroDAO;
 import integracaoJDBC.DaoException;
@@ -30,10 +31,48 @@ public class CarroResource {
 	}
 
 	@GET
-	public List<Carro> read() throws DaoException {
-		List<Carro> carros;
-		carros = dao.read();
-		return carros;
+    @Path("{id}")
+    public Carro readById(@PathParam("id") LongParam id) {
+        long idCarro = id.get();
+        Carro car = null;
+        
+        try {
+        	car = dao.readById(idCarro);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+        
+        return car;
+    }
+
+	@GET
+	@Path("{modelo}")
+	public List<Carro> readByName(@PathParam("nome") LongParam modelo) throws DaoException{
+		String nomeCarro = String.valueOf(modelo.get());
+		List<Carro> car = null;
+		
+		try {
+			car = dao.readByModelo(nomeCarro);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return car;
+	}
+	
+	@GET
+	@Path("{ano}")
+	public List<Carro> readByAno(@PathParam("ano") LongParam ano) throws DaoException{
+		int anoCarros = Integer.parseInt(String.valueOf(ano.get()));
+		List<Carro> car = new ArrayList<Carro>();
+		
+		try {
+			car = dao.readByAno(anoCarros);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return car;
 	}
 
 	@POST
@@ -49,15 +88,7 @@ public class CarroResource {
 		}
 		return resp;
 	}
-
-	@GET
-	@Path("{id}")
-	public Aplicativo readOne(@PathParam("id") LongParam id) {
-		long idCarro = id.get();
-		// Precisa implementar no DAO
-		return null;
-	}
-
+	
 	@PUT
 	@Path("{id}")
 	public Carro update(@PathParam("id") LongParam id, Carro car) throws DaoException {
@@ -70,24 +101,24 @@ public class CarroResource {
 
 	@DELETE
 	@Path("{id}")
-	public Response delete(@PathParam("id") LongParam id) throws DaoException {
-		Carro car;
-		try {
+	public Response delete(@PathParam("id") LongParam id) throws DaoException, SQLException {
+        Carro car;
+		try
+		{
 			car = dao.readById(id.get());
-		} catch (DaoException ex) {
+		}catch(DaoException ex)
+		{
 			ex.printStackTrace();
-			throw new WebApplicationException("Erro ao buscar Aplicativo com id=" + id.get(), 500);
+			throw new WebApplicationException("Erro ao buscar Carro com id="+ id.get(),500);
 		}
-		if (car != null) {
-			try {
-				dao.delete(id.get());
-			} catch (DaoException ex) {
-				ex.printStackTrace();
-				throw new WebApplicationException("Erro ao tentar apagar Aplicativo com id=" + id.get(), 500);
-			}
-		} else {
-			throw new WebApplicationException("Aplicativo com id=" + id.get() + " não encontrado!", 404);
+		if(car != null)
+		{
+			dao.delete(id.get());
+		}
+		else
+		{
+			throw new WebApplicationException("Carro com id=" + id.get() + " não encontrado!", 404);
 		}
 		return Response.ok().build();
-	}
+    }
 }

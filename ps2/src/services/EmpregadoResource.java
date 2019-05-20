@@ -1,5 +1,6 @@
 package services;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -13,8 +14,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import domains.Aplicativo;
-import domains.Carro;
 import domains.Empregado;
 import integracaoJDBC.DaoException;
 import integracaoJDBC.EmpregadoDAO;
@@ -71,7 +70,7 @@ public class EmpregadoResource {
 
 	@DELETE
 	@Path("{id}")
-	public Response delete(@PathParam("id") LongParam id) throws DaoException {
+	public Response delete(@PathParam("id") LongParam id) throws DaoException, SQLException {
 		Empregado emp;
 		try {
 			emp = dao.readById(id.get());
@@ -80,12 +79,7 @@ public class EmpregadoResource {
 			throw new WebApplicationException("Erro ao buscar Aplicativo com id=" + id.get(), 500);
 		}
 		if (emp != null) {
-			try {
-				dao.delete(id.get());
-			} catch (DaoException ex) {
-				ex.printStackTrace();
-				throw new WebApplicationException("Erro ao tentar apagar Aplicativo com id=" + id.get(), 500);
-			}
+			dao.delete(id.get());
 		} else {
 			throw new WebApplicationException("Aplicativo com id=" + id.get() + " não encontrado!", 404);
 		}

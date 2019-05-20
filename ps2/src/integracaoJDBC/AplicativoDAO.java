@@ -13,10 +13,10 @@ import domains.Aplicativo;
 public class AplicativoDAO {
 	private final String sqlC = "INSERT INTO aplicativo(nome, desenvolvedor, numero_downloads) VALUES(?, ?, ?)";
 	private final String sqlR = "SELECT * FROM aplicativo";
-	private final String sqlReadFilter = "SELECT * FROM aplicativo where id=?";
+	private final String sqlReadFilter = "SELECT * FROM aplicativo where ?=?";
 	private final String sqlU = "UPDATE aplicativo SET nome=?, desenvolvedor=?, numero_downloads=? WHERE id=?";
 	private final String sqlD = "DELETE FROM aplicativo WHERE id=?";
-	
+
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
 	private PreparedStatement stmRFilter;
@@ -24,8 +24,8 @@ public class AplicativoDAO {
 	private PreparedStatement stmD;
 
 	Connection conexao;
-	
-	public AplicativoDAO(ConexaoJDBC conexao) throws Exception{
+
+	public AplicativoDAO(ConexaoJDBC conexao) throws Exception {
 		try {
 			Connection con = conexao.getConnection();
 			stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
@@ -34,85 +34,124 @@ public class AplicativoDAO {
 			stmU = con.prepareStatement(sqlU);
 			stmD = con.prepareStatement(sqlD);
 
-		} catch(SQLException ex) {
+		} catch (SQLException ex) {
 			ex.printStackTrace();
-			//throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
+			// throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 		}
 
 	}
-	
-	public List<Aplicativo> read() throws DaoException{
+
+	public List<Aplicativo> read() throws DaoException {
 		List<Aplicativo> aplicativos = new ArrayList<>();
 		try {
 			ResultSet rs = this.stmR.executeQuery();
-			while(rs.next()) {
-                            long id = rs.getLong("id");
-                            String nome = rs.getString("nome");
-                            String desenvolvedor = rs.getString("desenvolvedor");
-                            int numDownloads = rs.getInt("numero_downloads");
-                            
-				Aplicativo app = new Aplicativo(id,nome,desenvolvedor,numDownloads);				
+			while (rs.next()) {
+				long id = rs.getLong("id");
+				String nome = rs.getString("nome");
+				String desenvolvedor = rs.getString("desenvolvedor");
+				int numDownloads = rs.getInt("numero_downloads");
+
+				Aplicativo app = new Aplicativo(id, nome, desenvolvedor, numDownloads);
 				aplicativos.add(app);
 			}
-			
+
 			rs.close();
-			
-		} catch(SQLException ex) {
-                    ex.printStackTrace();
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 			throw new DaoException("Falha ao ler registros: " + ex.getMessage());
-                }
-		
+		}
+
 		return aplicativos;
 	}
-        
-        public Aplicativo readById(long id) throws DaoException
-        {
-            Aplicativo app = null;
-            
-            try
-            {
-                this.stmRFilter.setLong(1,id);
-                ResultSet rs = this.stmRFilter.executeQuery();
-                if (rs.next()) {
-                    String nome = rs.getString("nome");
-                    String desenvolvedor = rs.getString("desenvolvedor");
-                    int numDownloads = rs.getInt("numero_downloads");
-                    app = new Aplicativo(id,nome,desenvolvedor,numDownloads);
-                    
-                }
-            }
-            catch(SQLException ex)
-            {
-                ex.printStackTrace();
-                throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
-            }
-            return app;
-        }
+
+	public Aplicativo readById(long id) throws DaoException {
+		Aplicativo app = null;
+
+		try {
+			this.stmRFilter.setLong(1, id);
+			ResultSet rs = this.stmRFilter.executeQuery();
+			if (rs.next()) {
+				String nome = rs.getString("nome");
+				String desenvolvedor = rs.getString("desenvolvedor");
+				int numDownloads = rs.getInt("numero_downloads");
+				app = new Aplicativo(id, nome, desenvolvedor, numDownloads);
+
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
+		}
+		return app;
+	}
+
+	public Aplicativo readByNome(String nome) throws DaoException {
+		Aplicativo app = null;
+
+		try {
+			this.stmRFilter.setString(1, "nome");
+			this.stmRFilter.setString(2, nome);
+			ResultSet rs = this.stmRFilter.executeQuery();
+			if (rs.next()) {
+				String desenvolvedor = rs.getString("desenvolvedor");
+				int numDownloads = rs.getInt("numero_downloads");
+				long id = rs.getLong("id");
+
+				app = new Aplicativo(id, nome, desenvolvedor, numDownloads);
+
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
+		}
+		return app;
+	}
+
+	public Aplicativo readByDesenvolvedor(String desenvolvedor) throws DaoException {
+		Aplicativo app = null;
+
+		try {
+			this.stmRFilter.setString(1, "desenvolvedor");
+			this.stmRFilter.setString(2, desenvolvedor);
+			ResultSet rs = this.stmRFilter.executeQuery();
+			if (rs.next()) {
+				long id = rs.getLong("id");
+				String nome = rs.getString("nome");
+				int numDownloads = rs.getInt("numero_downloads");
+				
+				app = new Aplicativo(id, nome, desenvolvedor, numDownloads);
+
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
+		}
+		return app;
+	}
 	
-	public long create (Aplicativo aplicativo) throws DaoException {
-            long id = 0;    
-            try {
-			   this.stmC.setString(1, aplicativo.getNome());
-			   this.stmC.setString(2, aplicativo.getDesenvolvedor());
-			   this.stmC.setInt(3, aplicativo.getNumDownloads());
-			   this.stmC.executeUpdate();
-			   ResultSet rs = this.stmC.getGeneratedKeys();
-			             if (rs.next()) 
-                                     {
-                                         id = rs.getLong(1);
-                                     }
-			   
-			   		} catch(SQLException ex) {
-                                            ex.printStackTrace();
+	public long create(Aplicativo aplicativo) throws DaoException {
+		long id = 0;
+		try {
+			this.stmC.setString(1, aplicativo.getNome());
+			this.stmC.setString(2, aplicativo.getDesenvolvedor());
+			this.stmC.setInt(3, aplicativo.getNumDownloads());
+			this.stmC.executeUpdate();
+			ResultSet rs = this.stmC.getGeneratedKeys();
+			if (rs.next()) {
+				id = rs.getLong(1);
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
 			throw new DaoException("Falha ao criar registro: " + ex.getMessage());
 		}
 		return id;
-	
+
 	}
-	
-	public int update(Aplicativo aplicativo) throws DaoException{
-            int r = 0;
-            try {
+
+	public int update(Aplicativo aplicativo) throws DaoException {
+		int r = 0;
+		try {
 			this.stmU.setString(1, aplicativo.getNome());
 			this.stmU.setString(2, aplicativo.getDesenvolvedor());
 			this.stmU.setInt(3, aplicativo.getNumDownloads());
@@ -120,25 +159,24 @@ public class AplicativoDAO {
 			r = this.stmU.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
-                        throw new DaoException("Falha ao atualizar registro: " + e.getMessage());
+			throw new DaoException("Falha ao atualizar registro: " + e.getMessage());
 		}
-		
+
 		return r;
 	}
-	
+
 	public int delete(long id) throws DaoException {
-	int r = 0;	
-            try{
-                    this.stmD.setLong(1, id);
-                    r = this.stmD.executeUpdate();
-                }catch(SQLException e) 
-                {
-                    throw new DaoException("Falha ao apagar registro: " + e.getMessage());
-                }
-                    
+		int r = 0;
+		try {
+			this.stmD.setLong(1, id);
+			r = this.stmD.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Falha ao apagar registro: " + e.getMessage());
+		}
+
 		return r;
 	}
-	
+
 	public void close() throws Exception {
 		try {
 			stmC.close();
@@ -147,7 +185,7 @@ public class AplicativoDAO {
 			stmU.close();
 			stmD.close();
 
-		} catch(SQLException ex) {
+		} catch (SQLException ex) {
 			ex.printStackTrace();
 			throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
 		}

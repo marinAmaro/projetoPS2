@@ -17,7 +17,7 @@ public class EmpregadoDAO {
 	private final String sqlReadFilter = "SELECT * FROM empregado where id=?";
 	private final String sqlU = "UPDATE aplicativo SET nome=?, cargo=?, salario=? WHERE id=?";
 	private final String sqlD = "DELETE FROM empregado WHERE id=?";
-	
+
 	private PreparedStatement stmC;
 	private PreparedStatement stmR;
 	private PreparedStatement stmRFilter;
@@ -25,101 +25,126 @@ public class EmpregadoDAO {
 	private PreparedStatement stmD;
 
 	Connection conexao;
-		
-		public EmpregadoDAO(ConexaoJDBC conexao) throws Exception {
-			try {
-				Connection con = conexao.getConnection();
-				stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
-				stmR = con.prepareStatement(sqlR);
-				stmRFilter = con.prepareStatement(sqlReadFilter);
-				stmU = con.prepareStatement(sqlU);
-				stmD = con.prepareStatement(sqlD);
 
-			} catch(SQLException ex) {
-				ex.printStackTrace();
-				//throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
-			}
-			
+	public EmpregadoDAO(ConexaoJDBC conexao) throws Exception {
+		try {
+			Connection con = conexao.getConnection();
+			stmC = con.prepareStatement(sqlC, Statement.RETURN_GENERATED_KEYS);
+			stmR = con.prepareStatement(sqlR);
+			stmRFilter = con.prepareStatement(sqlReadFilter);
+			stmU = con.prepareStatement(sqlU);
+			stmD = con.prepareStatement(sqlD);
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			// throw new DaoException("Falha ao preparar statement: " + ex.getMessage());
 		}
-		
-		public List<Empregado> read(){
-			List<Empregado> empregados = new ArrayList<>();
-			
-			try {
-				ResultSet rs = this.stmR.executeQuery();	
-				
-				while(rs.next()) {
-					Empregado empregado = new Empregado();
-					
-					empregado.setId(rs.getLong("id"));
-					empregado.setNome(rs.getString("nome"));
-					empregado.setCargo(rs.getString("cargo"));
-					empregado.setSalario(rs.getDouble("salario"));
-					
-					empregados.add(empregado);
-				}
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
+
+	}
+
+	public List<Empregado> read() {
+		List<Empregado> empregados = new ArrayList<>();
+
+		try {
+			ResultSet rs = this.stmR.executeQuery();
+
+			while (rs.next()) {
+				Empregado empregado = new Empregado();
+
+				empregado.setId(rs.getLong("id"));
+				empregado.setNome(rs.getString("nome"));
+				empregado.setCargo(rs.getString("cargo"));
+				empregado.setSalario(rs.getDouble("salario"));
+
+				empregados.add(empregado);
 			}
-			
-			return empregados;
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
-		public Empregado create(Empregado empregado) {
-			try {
-				   this.stmC.setString(1, empregado.getNome());
-				   this.stmC.setString(2, empregado.getCargo());
-				   this.stmC.setDouble(3, empregado.getSalario());
-				
-					this.stmC.executeUpdate();
-				   ResultSet rs = this.stmC.getGeneratedKeys();
-				   rs.next();
-				   long id = rs.getLong(1);
-				   empregado.setId(id);
-				   
-			} catch (Exception e) {
-				e.printStackTrace();
+
+		return empregados;
+	}
+
+	public Empregado readById(long id) throws DaoException {
+		Empregado emp = null;
+
+		try {
+			this.stmRFilter.setLong(1, id);
+			ResultSet rs = this.stmRFilter.executeQuery();
+			if (rs.next()) {
+				String nome = rs.getString("nome");
+				String cargo = rs.getString("cargo");
+				double salario = rs.getDouble("salario");
+				emp = new Empregado(id, nome, cargo, salario);
+
 			}
-			
-			return empregado;
-		
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao buscar pelo id: " + ex.getMessage());
 		}
-		
-		public int update(Empregado empregado) {
-			int r = 0;
-			
-			try {
-				this.stmU.setString(1, empregado.getNome());
-				this.stmU.setString(2, empregado.getCargo());
-				this.stmU.setDouble(3, empregado.getSalario());
-				
-				r = this.stmU.executeUpdate();
-			} catch (Exception e) {
-				e.printStackTrace();
+
+		return emp;
+	}
+
+	public long create(Empregado empregado) throws DaoException {
+		long id = 0;
+		try {
+			this.stmC.setString(1, empregado.getNome());
+			this.stmC.setString(2, empregado.getCargo());
+			this.stmC.setDouble(3, empregado.getSalario());
+			this.stmC.executeUpdate();
+			ResultSet rs = this.stmC.getGeneratedKeys();
+			if (rs.next()) {
+				id = rs.getLong(1);
 			}
-			
-			return r;
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw new DaoException("Falha ao criar registro: " + ex.getMessage());
 		}
-		
-		public int delete(long id) throws SQLException {
+		return id;
+	}
+
+	public int update(Empregado empregado) {
+		int r = 0;
+
+		try {
+			this.stmU.setString(1, empregado.getNome());
+			this.stmU.setString(2, empregado.getCargo());
+			this.stmU.setDouble(3, empregado.getSalario());
+
+			r = this.stmU.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return r;
+	}
+
+	public int delete(long id) throws SQLException, DaoException {
+		int r = 0;
+		try {
 			this.stmD.setLong(1, id);
-			int r = this.stmD.executeUpdate();
-			return r;
+			r = this.stmD.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Falha ao apagar registro: " + e.getMessage());
 		}
-		
-		public void close() throws Exception {
-			try {
-				stmC.close();
-				stmR.close();
-				stmRFilter.close();
-				stmU.close();
-				stmD.close();
 
-			} catch(SQLException ex) {
-				ex.printStackTrace();
-				//throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
-			}
+		return r;
+	}
+
+	public void close() throws Exception {
+		try {
+			stmC.close();
+			stmR.close();
+			stmRFilter.close();
+			stmU.close();
+			stmD.close();
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			// throw new DaoException("Falha ao fechar DAO: " + ex.getMessage());
 		}
 	}
+}

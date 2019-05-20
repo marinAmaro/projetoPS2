@@ -5,6 +5,15 @@ public class Empregado {
 	String nome;
 	String cargo;
 	double salario;
+	
+	public Empregado() {}
+	
+	public Empregado(long id, String nome, String cargo, double salario) {
+		this.id = id;
+		this.nome = nome;
+		this.cargo = cargo;
+		this.salario = salario;
+	}
 
 	public long getId() {
 		return this.id;
