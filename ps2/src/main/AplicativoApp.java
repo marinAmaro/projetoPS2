@@ -6,10 +6,13 @@ import integracaoJDBC.ConexaoJDBC;
 import integracaoJDBC.EmpregadoDAO;
 import io.dropwizard.Application;
 import io.dropwizard.Configuration;
+import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import services.AplicativoResource;
 import services.CarroResource;
 import services.EmpregadoResource;
+
 
 public class AplicativoApp extends Application<Configuration> {
 
@@ -17,6 +20,14 @@ public class AplicativoApp extends Application<Configuration> {
 		new AplicativoApp().run(new String[] {"server"});
 	}
 	
+    @Override
+    public void initialize(final Bootstrap<Configuration> bootstrap) {
+        //Mapeia a pasta "src/html" para a url "http://localhost:8080/" e
+        // por padrao abre o arquivo index.html quando um recurso especifico
+        // nao for informado
+        bootstrap.addBundle(new AssetsBundle("/html", "/", "index.html"));
+    }	
+    
 	@Override
 	public void run(Configuration configuration, Environment environment) {
 		try {
@@ -37,6 +48,9 @@ public class AplicativoApp extends Application<Configuration> {
 			//
 			EmpregadoDAO empregadoDao = new EmpregadoDAO(conexao);
 			environment.jersey().register(new EmpregadoResource(empregadoDao));
+			
+			environment.jersey().setUrlPattern("/api/*");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
